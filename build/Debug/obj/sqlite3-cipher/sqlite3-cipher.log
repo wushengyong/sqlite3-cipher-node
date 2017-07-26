@@ -1,0 +1,15 @@
+﻿生成启动时间为 2017/7/26 16:41:16。
+     1>项目“D:\sqlite3\sqlite3-cipher-node\build\sqlite3-cipher.vcxproj”在节点 2 上(Build 个目标)。
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\sqlite3\sqlite3-cipher-node\build\Debug\sqlite3-cipher.node" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib DelayImp.lib "C:\Users\Administrator\.node-gyp\6.10.3\x64\node.lib" Delayimp.lib /DELAYLOAD:iojs.exe /DELAYLOAD:node.exe /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\sqlite3\sqlite3-cipher-node\build\Debug\sqlite3-cipher.pdb" /MAP /MAPINFO:EXPORTS /TLBID:1 /DYNAMICBASE /NXCOMPAT /MACHINE:X64 /ignore:4199 /DLL "Debug\obj\sqlite3-cipher\sqlite3.obj"
+         "Debug\obj\sqlite3-cipher\sqlite3cipherdb.obj"
+         "Debug\obj\sqlite3-cipher\main.obj"
+         "Debug\obj\sqlite3-cipher\win_delay_load_hook.obj"
+            正在创建库 D:\sqlite3\sqlite3-cipher-node\build\Debug\sqlite3-cipher.lib 和对象 D:\sqlite3\sqlite3-cipher-node\build\Debug\sqlite3-cipher.exp
+     1>sqlite3cipherdb.obj : error LNK2019: 无法解析的外部符号 "__declspec(dllimport) public: bool __cdecl v8::Value::IsFloat32x4(void)const " (__imp_?IsFloat32x4@Value@v8@@QEBA_NXZ)，该符号在函数 "private: static bool __cdecl sqlite3_cipher::Sqlite3CipherDb::primitiveExpression(class v8::Local<class v8::Value> &,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &,class std::vector<class sqlite3_cipher::ParamNode *,class std::allocator<class sqlite3_cipher::ParamNode *> > &)" (?primitiveExpression@Sqlite3CipherDb@sqlite3_cipher@@CA_NAEAV?$Local@VValue@v8@@@v8@@AEAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AEAV?$vector@PEAVParamNode@sqlite3_cipher@@V?$allocator@PEAVParamNode@sqlite3_cipher@@@std@@@6@@Z) 中被引用
+     1>D:\sqlite3\sqlite3-cipher-node\build\Debug\sqlite3-cipher.node : fatal error LNK1120: 1 个无法解析的外部命令
+     1>已完成生成项目“D:\sqlite3\sqlite3-cipher-node\build\sqlite3-cipher.vcxproj”(Build 个目标)的操作 - 失败。
+
+生成失败。
+
+已用时间 00:00:00.34

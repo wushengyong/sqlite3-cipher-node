@@ -1,0 +1,2 @@
+#TargetFrameworkVersion=v4.0:PlatformToolSet=v120:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native64Bit
+Release|x64|D:\sqlite3\sqlite3-cipher-node\build\|

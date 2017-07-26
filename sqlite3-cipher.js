@@ -11,6 +11,12 @@ var sqlite = require('../build/Release/sqlite3-cipher');
 //  filter : $in
 //  filter : $nin
 
+
+// expr : {$or : [expr, expr ...]} | {$and : [expr,expr ...]} | 
+//         {$gt : [string, primivte]} | {$lt : [string, primitive]} | {$gte : [string, primitive]} | {$lte : [string, primitive]} |
+//         {$exists : string} | {$in : [a,b,c,d]} | {$nin : [a,b,c,d]} | {string:string} | 就是and[]
+//         
+
 // 如何实现，思路：
 // 1.  一般都是挂在find后面，可以在find中特殊处理，中间加一层js object，延迟执行find比如Process.nextTick
 // 2.  .count .skip .limit均可以设置js object的成员变量
