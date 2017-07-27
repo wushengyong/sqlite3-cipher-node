@@ -6,15 +6,13 @@ var sqlite = require('../build/Release/sqlite3-cipher');
 //  filter : $lt
 //  filter : $gte
 //  filter : $lte
-//  filter : $all
-//  filter : $exists
 //  filter : $in
 //  filter : $nin
 
 
 // expr : {$or : [expr, expr ...]} | {$and : [expr,expr ...]} | 
 //         {$gt : [string, primivte]} | {$lt : [string, primitive]} | {$gte : [string, primitive]} | {$lte : [string, primitive]} |
-//         {$exists : string} | {$in : [a,b,c,d]} | {$nin : [a,b,c,d]} | {string:string} | 就是and[]
+//       | {$in : [a,b,c,d]} | {$nin : [a,b,c,d]} | {string:string} | 就是and[]
 //         
 
 // 如何实现，思路：
