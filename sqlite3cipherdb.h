@@ -26,9 +26,9 @@ private:
 
 	static void New(const FunctionCallbackInfo<Value>& args);
 
-	// °ó¶¨²ÎÊý
+	// ï¿½ó¶¨²ï¿½ï¿½ï¿½
 	static void bind(const FunctionCallbackInfo<Value>& args);
-	// Ö´ÐÐ
+	// Ö´ï¿½ï¿½
 	static void exec(const FunctionCallbackInfo<Value>& args);
 
 	static Persistent<Function> constructor;
@@ -42,7 +42,6 @@ class Sqlite3CipherDb : public node::ObjectWrap
 {
 public:
     static void Init();
-    static void NewInstance(const FunctionCallbackInfo<Value>& args);
 	static void connect(const FunctionCallbackInfo<Value>& args);
 
 private:
@@ -56,7 +55,7 @@ private:
     static void close(const FunctionCallbackInfo<Value>& args);
 	static void prepare(const FunctionCallbackInfo<Value>& args);
 
-private:
+public:
     static Persistent<Function> constructor;
     sqlite3* m_pDB; 
 };

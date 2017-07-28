@@ -160,31 +160,21 @@ void Sqlite3CipherDb::New(const FunctionCallbackInfo<Value>& args)
         obj->Wrap(args.This());
         args.GetReturnValue().Set(args.This());
     } else {
-        // Normal Method 
-        NewInstance(args);
+		Isolate* isolate = args.GetIsolate();
+		HandleScope scope(isolate);
+
+		const int argc = 3;
+		Local<Value> argv[argc] = {args[0], args[1], args[2]};
+
+		Local<Function> cons = Local<Function>::New(isolate, constructor);
+		Local<Context> context = isolate->GetCurrentContext();
+		Local<Object> instance = cons->NewInstance(context, argc, argv).ToLocalChecked();
+		args.GetReturnValue().Set(instance);
     }
 }
-
-void Sqlite3CipherDb::NewInstance(const FunctionCallbackInfo<Value>& args)
-{
-	Isolate* isolate = args.GetIsolate();
-	HandleScope scope(isolate);
-
-    const int argc = 3;
-    Local<Value> argv[argc] = {args[0], args[1], args[2]};
-
-	Local<Function> cons = Local<Function>::New(isolate, constructor);
-    Local<Context> context = isolate->GetCurrentContext();
-    Local<Object> instance = cons->NewInstance(context, argc, argv).ToLocalChecked();
-    args.GetReturnValue().Set(instance);
-}
-
 void Sqlite3CipherDb::connect(const FunctionCallbackInfo<Value>& args)
 {
 	Isolate* isolate = args.GetIsolate();
-	HandleScope scope(isolate);
-
-	Isolate* isolate = Isolate::GetCurrent();
 	HandleScope scope(isolate);
 
 	if (!args[0]->IsString())return;
@@ -302,6 +292,15 @@ void thread_done(uv_work_t* req, int status)
 			Local<Value> argv[] = { Exception::Error(String::NewFromUtf8(isolate, pConnectInfo->error.c_str())) };
 			callback->Call(isolate->GetCurrentContext()->Global(), _countof(argv), argv);
 		}
+		Local<Function> cons = Local<Function>::New(isolate, Sqlite3CipherDb::constructor);
+		Local<Context> context = isolate->GetCurrentContext();
+		Local<Object> instance = cons->NewInstance(context).ToLocalChecked();
+		Sqlite3CipherDb* db = node::ObjectWrap::Unwrap<Sqlite3CipherDb>(instance);
+		if (db != NULL){
+			db->m_pDB = pConnectInfo->pDb;
+		}
+		Local<Value> argv[] = { Null(isolate), instance };
+		callback->Call(isolate->GetCurrentContext()->Global(), _countof(argv), argv);
 	}
 	else if (threadInfo->type == THREAD_OPERATE_CLOSE_DB){
 		CLOSE_THREAD_INFO* pCloseInfo = (CLOSE_THREAD_INFO*)req->data;
@@ -311,6 +310,8 @@ void thread_done(uv_work_t* req, int status)
 			Local<Value> argv[] = { Exception::Error(String::NewFromUtf8(isolate, pCloseInfo->error.c_str())) };
 			callback->Call(isolate->GetCurrentContext()->Global(), _countof(argv), argv);
 		}
+		Local<Value> argv[] = { Null(isolate) };
+		callback->Call(isolate->GetCurrentContext()->Global(), _countof(argv), argv);
 	}
 	delete threadInfo;
 }
