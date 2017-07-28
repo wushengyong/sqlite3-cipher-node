@@ -6,6 +6,11 @@ sqlite.connect('test.db','abcdefg',function (err, db){
         return;
     }
     console.log(db);
-    db.close();
-    console.log("ok");
+    db.close(function (err){
+		if (err){
+			console.log(err);
+			return;
+		}
+		console.log("closed.");
+	});
 })

@@ -18,10 +18,10 @@ class Sqlite3CipherStmt : public node::ObjectWrap
 public:
 	static void Init();
 
-	static void prepare(const FunctionCallbackInfo<Value>& args);
+	static Local<Object> prepare(Local<Object> db, Local<String> sql);
 
 private:
-	explicit Sqlite3CipherStmt(Local<Sqlite3CipherDb> db);
+	explicit Sqlite3CipherStmt(Sqlite3CipherDb* pDB, std::string sql);
 	~Sqlite3CipherStmt();
 
 	static void New(const FunctionCallbackInfo<Value>& args);
@@ -33,8 +33,9 @@ private:
 
 	static Persistent<Function> constructor;
 
+	std::string           m_strSql;
 	sqlite3_stmt*         m_pStmts;
-	Persistent<Sqlite3CipherDb>  m_db;
+	Sqlite3CipherDb*      m_pDB;
 };
 
 class Sqlite3CipherDb : public node::ObjectWrap
@@ -50,18 +51,14 @@ private:
 
     static void New(const FunctionCallbackInfo<Value>& args);
 
+
     static void exec(const FunctionCallbackInfo<Value>& args);
     static void close(const FunctionCallbackInfo<Value>& args);
 	static void prepare(const FunctionCallbackInfo<Value>& args);
 
-	static void exec_ing_(uv_work_t* req);
-	static void exec_done_(uv_work_t* req, int status);
-
+private:
     static Persistent<Function> constructor;
-
     sqlite3* m_pDB; 
-
-	friend class Sqlite3CipherStmt;
 };
 
 }
