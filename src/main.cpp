@@ -12,6 +12,7 @@ void connect(const FunctionCallbackInfo<Value>& args)
 
 void Init(Local<Object> exports, Local<Object> module){
     Sqlite3CipherDb::Init();
+	Sqlite3CipherStmt::Init();
 	NODE_SET_METHOD(exports, "connect", connect);
 }
 NODE_MODULE(sqlite3cipher,Init);
