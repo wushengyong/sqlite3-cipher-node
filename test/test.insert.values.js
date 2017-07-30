@@ -11,11 +11,9 @@ sqlite.connect(config.dbPath, config.passwd,function (err, db){
             console.log("bind large double: ",stmt.bind(2,0.3));
             console.log("bind large string: ",stmt.bind(3,'I just test.'));
             console.log("bind large buff: ",stmt.bind(4, new Buffer([0x1,0x2,0x3,0x4])));
-            stmt.exec(function (err, items){
+            stmt.exec(function (err){
                 if (err){
                     console.log(err);
-                } else {
-                    console.log(items);
                 }
                 db.close();
             });
