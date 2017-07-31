@@ -99,6 +99,10 @@ table.prototype.insert = function (obj,callback){
         }
         var sql = "INSERT INTO " + this.tablename + "(" + colnames.join(",") + ") VALUES (" + values_tag.join(",") + ")";
         this.db.prepare(sql, function (err, stmt){
+            if (err){
+                callback(err);
+                return;
+            }
             for (var index = 0 ; index < values.length ; ++ index){
                 stmt.bind(index, values[index]);
             }

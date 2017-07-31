@@ -10,4 +10,6 @@ node test.$gt.js
 node test.$in.js
 node test.complex.find.js
 node test.select.field.js
+echo test insert 
+node test.table.insert.js
 pause
