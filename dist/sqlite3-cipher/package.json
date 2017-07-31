@@ -1,0 +1,16 @@
+{
+  "name": "sqlitecipher",
+  "version": "1.0.0",
+  "description": "sqlitecipher plugin for node",
+  "main": "index.js",
+  "scripts": {
+    "test": "node debug \"../test/test.js\"",
+    "install": "node-gyp rebuild"
+  },
+  "keywords": [
+    "sqlitecipher"
+  ],
+  "author": "wushengyong",
+  "license": "MIT",
+  "gypfile": true
+}

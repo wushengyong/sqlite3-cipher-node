@@ -99,6 +99,10 @@ table.prototype.insert = function (obj,callback){
         }
         var sql = "INSERT INTO " + this.tablename + "(" + colnames.join(",") + ") VALUES (" + values_tag.join(",") + ")";
         this.db.prepare(sql, function (err, stmt){
+            if (err){
+                callback(err);
+                return;
+            }
             for (var index = 0 ; index < values.length ; ++ index){
                 stmt.bind(index, values[index]);
             }
@@ -184,9 +188,10 @@ table.prototype.update = function (obj, conditions, callback){
     for (var key in obj){
         if (typeof(obj[key]) == 'function')continue;
         if (update_sql)update_sql += ",";
-        update_sql += key + "=?";
+        update_sql += key + "= ?";
         values.push(obj[key]);
     }
+    update_sql = "SET " + update_sql;
     if (!values){
         callback(null);
         return;
@@ -198,6 +203,10 @@ table.prototype.update = function (obj, conditions, callback){
     }
     
     this.db.prepare(sql, function (err, stmt){
+        if (err){
+            callback(err);
+            return;
+        }
         for (var index = 0 ; index < values.length ; ++ index){
             stmt.bind(index, values[index]);
         }
@@ -214,6 +223,10 @@ table.prototype.delete = function (conditions, callback){
     }
     
     this.db.prepare(sql, function (err, stmt){
+        if (err){
+            callback(err);
+            return;
+        }
         for (var index = 0 ; index < values.length ; ++ index){
             stmt.bind(index, values[index]);
         }

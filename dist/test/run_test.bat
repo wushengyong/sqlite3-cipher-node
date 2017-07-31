@@ -12,4 +12,8 @@ node test.complex.find.js
 node test.select.field.js
 echo test insert 
 node test.table.insert.js
+echo test update
+node test.table.update.js
+echo test delete
+node test.table.delete.js
 pause
