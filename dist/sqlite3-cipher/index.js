@@ -233,32 +233,3 @@ exports.connect = function (dbpath,key,callback)
         callback(err,db);
     })
 };
-//  filter : $or 
-//  filter : $and
-//  filter : $gt
-//  filter : $lt
-//  filter : $gte
-//  filter : $lte
-//  filter : $in
-//  filter : $nin
-
-
-// expr : {$or : [expr, expr ...]} | {$and : [expr,expr ...]} | 
-//         {$gt : [string, primivte]} | {$lt : [string, primitive]} | {$gte : [string, primitive]} | {$lte : [string, primitive]} |
-//       | {$in : [a,b,c,d]} | {$nin : [a,b,c,d]} | {string:string} | 就是and[]
-//         
-
-// 如何实现，思路：
-// 1.  一般都是挂在find后面，可以在find中特殊处理，中间加一层js object，延迟执行find比如Process.nextTick
-// 2.  .count .skip .limit均可以设置js object的成员变量
-// 3.
-// .count() 数量
-// .skip()
-// .limit()
-// .sort({KEY : 1}) .sort({KEY : -1})
-/*sqlite.connect(function (err, db){
-    db.insert(data,function (err, items){});
-    db.find(filter,function (err, items){});
-    db.update(filter,data,function (err,items){});
-    db.delete(filter,function (err, items){})
-});*/
