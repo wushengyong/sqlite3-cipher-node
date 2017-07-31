@@ -1,16 +1,6 @@
 var sqlite = require('./sqlite3-cipher');
 
 
-function table(tablename, db)
-{
-    this.tablename = tablename;
-    this.db = db;
-}
-
-table.prototype.insert = function (){
-
-};
-
 const multi_params_name = ['$or', '$and'];
 const multi_params_operator = [' OR ', ' AND '];
 
@@ -21,7 +11,7 @@ const two_params_name_2 = ['$in', '$nin'];
 const two_params_operator_2 = [' IN ', ' NOT IN '];
 
 // - Attention : bind的只能是参数，不能是列名
-function __parse(obj,binds)
+function __parse_condition__(obj,binds)
 {
     if (obj == null)return "";
     var total_sql = "";
@@ -34,7 +24,7 @@ function __parse(obj,binds)
             for (var subkey in obj[key]){
                 if (typeof (obj[key][subkey]) == "function")continue;
                 if (sql)sql += operator;
-                sql += __parse(obj[key][subkey],binds);
+                sql += __parse_condition__(obj[key][subkey],binds);
             }
             total_sql += "(" + sql + ")";
         }
@@ -61,7 +51,7 @@ function __parse(obj,binds)
         else {
             // condidtions[key]是object，同时不是buff，则让其继续解析，否则直接赋值相等
             if (typeof (obj[key]) == "object" && !Buffer.isBuffer(obj[key])){
-                total_sql += __parse(obj[key],binds);
+                total_sql += __parse_condition__(obj[key],binds);
             }
             else {
                 total_sql += "(" + key +"=?)";
@@ -72,6 +62,50 @@ function __parse(obj,binds)
     return total_sql;
 };
 
+function table(tablename, db)
+{
+    this.tablename = tablename;
+    this.db = db;
+}
+
+table.prototype.insert = function (obj,callback){
+    if (Array.isArray(obj)){
+        var self = this;
+        (function iterate(err,index,items){
+            if (err){
+                callback(err);
+            } else if (index < obj.length){
+                self.insert(obj[index],function (err,items__){
+                    iterate(err,index+1,items.concat(items__));
+                })
+            } else {
+                callback(err,items);
+            }
+        })(null,0,[]);
+        
+    } else {
+        var colnames = [];
+        var values = [];
+        var values_tag = [];
+        for (var key in obj){
+            if (typeof(obj[key]) == 'function')continue;
+            colnames.push(key);
+            values.push(obj[key]);
+            values_tag.push('?');
+        }
+        if (!values){
+            callback(null);
+            return;
+        }
+        var sql = "INSERT INTO " + this.tablename + "(" + colnames.join(",") + ") VALUES (" + values_tag.join(",") + ")";
+        this.db.prepare(sql, function (err, stmt){
+            for (var index = 0 ; index < values.length ; ++ index){
+                stmt.bind(index, values[index]);
+            }
+            stmt.exec(callback);
+        });
+    }
+};
 table.prototype.find = function (conditions,callback,fields) {
     var findinfo = {
         __tablename : this.tablename,
@@ -98,7 +132,7 @@ table.prototype.find = function (conditions,callback,fields) {
     };
     process.nextTick(function (){
         var binds = [];
-        var sql = __parse(findinfo.__conditions,binds);
+        var sql = __parse_condition__(findinfo.__conditions,binds);
         var total_sql = "";
         if (findinfo.__count){
             total_sql = "SELECT COUNT(*) FROM " + findinfo.__tablename;
@@ -144,12 +178,47 @@ table.prototype.find = function (conditions,callback,fields) {
     });
     return findinfo;
 }
-table.prototype.update = function (){
-
+table.prototype.update = function (obj, conditions, callback){
+    var values = [];
+    var update_sql = '';
+    for (var key in obj){
+        if (typeof(obj[key]) == 'function')continue;
+        if (update_sql)update_sql += ",";
+        update_sql += key + "=?";
+        values.push(obj[key]);
+    }
+    if (!values){
+        callback(null);
+        return;
+    }
+    var condition_sql = __parse_condition__(conditions,values);
+    var sql = "UPDATE " + this.tablename + " " + update_sql ;
+    if (condition_sql){
+        sql += " WHERE " + condition_sql;
+    }
+    
+    this.db.prepare(sql, function (err, stmt){
+        for (var index = 0 ; index < values.length ; ++ index){
+            stmt.bind(index, values[index]);
+        }
+        stmt.exec(callback);
+    });
 }
 
-table.prototype.delete = function (){
+table.prototype.delete = function (conditions, callback){
+    var values = [];
+    var condition_sql = __parse_condition__(conditions,values);
+    var sql = "DELETE FROM " + this.tablename;
+    if (condition_sql){
+        sql += " WHERE " + condition_sql;
+    }
     
+    this.db.prepare(sql, function (err, stmt){
+        for (var index = 0 ; index < values.length ; ++ index){
+            stmt.bind(index, values[index]);
+        }
+        stmt.exec(callback);
+    });
 }
 
 exports.connect = function (dbpath,key,callback)
