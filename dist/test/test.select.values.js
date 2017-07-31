@@ -1,4 +1,4 @@
-var sqlite = require('../src/build/Release/sqlite3-cipher');
+var sqlite = require('../sqlite3-cipher');
 var config = require('./config');
 
 sqlite.connect(config.dbPath, config.passwd,function (err, db){
