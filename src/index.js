@@ -237,9 +237,6 @@ table.prototype.delete = function (conditions, callback){
 exports.connect = function (dbpath,key,callback)
 {
     sqlite.connect(dbpath,key,function(err, db){
-        db.drop = function (tablename){
-            console.log(this);
-        };
         db.table = function (tablename){
             return new table(tablename,this);
         }
