@@ -155,9 +155,9 @@ table.prototype.find = function (conditions,callback,fields) {
             for (var key in findinfo.__sort){
                 if (typeof(findinfo.__sort[key]) == "function")continue;
                 if (findinfo.__sort[key] > 0){
-                    total_sql += " ORDER BY " + key + "ASC ";
+                    total_sql += " ORDER BY " + key + " ASC ";
                 } else {
-                    total_sql += " ORDER BY " + key + "DESC";
+                    total_sql += " ORDER BY " + key + " DESC";
                 }
             }
         }
